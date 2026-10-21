@@ -58,6 +58,29 @@ export function playRetroBeep(enabled = true) {
   }
 }
 
+export function playRetroError(enabled = true) {
+  if (!enabled) return;
+  try {
+    const ctx = getAudioContext();
+    const now = ctx.currentTime;
+    // Classic Windows 95 Chord-style error buzzer
+    [160, 220, 277].forEach((freq) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(freq, now);
+      gain.gain.setValueAtTime(0.09, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.35);
+    });
+  } catch (e) {
+    console.debug('Audio error:', e);
+  }
+}
+
 export function playWinStartupChime(enabled = true) {
   if (!enabled) return;
   try {

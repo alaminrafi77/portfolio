@@ -145,6 +145,9 @@ export const CvImportWizard: React.FC<CvImportWizardProps> = ({
           <div className="flex items-center gap-1.5">
             <span>🧙‍♂️</span>
             <span>CV Import Wizard 98 (Automatic Parser)</span>
+            <span className="text-[10px] bg-emerald-700 text-yellow-300 px-1.5 py-0.2 bevel-inset font-mono">
+              Admin: rafi
+            </span>
           </div>
           <button
             onClick={() => { playRetroClick(soundEnabled); onClose(); }}

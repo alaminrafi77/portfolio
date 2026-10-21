@@ -10,6 +10,7 @@ import { CvEditorModal } from './components/retro/CvEditorModal';
 import { CvImportWizard } from './components/retro/CvImportWizard';
 import { GitHubHostModal } from './components/retro/GitHubHostModal';
 import { CvPrintView } from './components/retro/CvPrintView';
+import { Windows95LoginModal } from './components/retro/Windows95LoginModal';
 import { playRetroClick, playWinStartupChime, playRetroBeep } from './utils/audio';
 
 export default function App() {
@@ -39,6 +40,60 @@ export default function App() {
   const [startMenuOpen, setStartMenuOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState('');
   const [copiedEmail, setCopiedEmail] = useState(false);
+
+  // Authentication State (Username: rafi, Password: rafirafirafi)
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    try {
+      return (
+        sessionStorage.getItem('alamin_auth_admin') === 'true' ||
+        localStorage.getItem('alamin_auth_admin') === 'true'
+      );
+    } catch {
+      return false;
+    }
+  });
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [loginPromptReason, setLoginPromptReason] = useState<string | undefined>(undefined);
+  const [pendingAuthAction, setPendingAuthAction] = useState<(() => void) | null>(null);
+
+  const handleRequireAuth = (action: () => void, reason?: string) => {
+    playRetroClick(soundEnabled);
+    if (isAuthenticated) {
+      action();
+    } else {
+      setPendingAuthAction(() => action);
+      setLoginPromptReason(
+        reason || 'Authentication Required: Please log on with username "rafi" to unlock editing privileges.'
+      );
+      setIsLoginModalOpen(true);
+    }
+  };
+
+  const handleLoginSuccess = () => {
+    setIsAuthenticated(true);
+    try {
+      localStorage.setItem('alamin_auth_admin', 'true');
+    } catch {
+      // ignore
+    }
+    if (pendingAuthAction) {
+      pendingAuthAction();
+      setPendingAuthAction(null);
+    }
+  };
+
+  const handleLogout = () => {
+    playRetroClick(soundEnabled);
+    setIsAuthenticated(false);
+    try {
+      localStorage.removeItem('alamin_auth_admin');
+      sessionStorage.removeItem('alamin_auth_admin');
+    } catch {
+      // ignore
+    }
+    setIsEditorOpen(false);
+    setIsWizardOpen(false);
+  };
 
   // Update clock every second
   useEffect(() => {
@@ -128,10 +183,13 @@ export default function App() {
             onToggleSound={() => setSoundEnabled(!soundEnabled)}
             crtEnabled={crtEnabled}
             onToggleCrt={() => setCrtEnabled(!crtEnabled)}
-            onOpenEditor={() => setIsEditorOpen(true)}
-            onOpenWizard={() => setIsWizardOpen(true)}
+            onOpenEditor={() => handleRequireAuth(() => setIsEditorOpen(true), 'Log on as rafi to open CV Notepad and edit portfolio data.')}
+            onOpenWizard={() => handleRequireAuth(() => setIsWizardOpen(true), 'Log on as rafi to run the CV Import Wizard.')}
             onOpenGitHubModal={() => setIsGitHubModalOpen(true)}
             onPrintCv={() => setIsPrintView(true)}
+            isAuthenticated={isAuthenticated}
+            onLoginClick={() => handleRequireAuth(() => {}, 'Please enter credentials to unlock editing privileges.')}
+            onLogoutClick={handleLogout}
           />
 
           {/* Under Construction Animated Banner Strip */}
@@ -475,12 +533,14 @@ export default function App() {
                   </div>
                   <button
                     onClick={() => {
-                      playRetroClick(soundEnabled);
-                      setIsEditorOpen(true);
+                      handleRequireAuth(() => setIsEditorOpen(true), 'Log on as rafi to customize and edit your skills matrix.');
                     }}
-                    className="px-2 py-1 bevel-button text-xs font-bold text-[#b30000]"
+                    className={`px-2 py-1 bevel-button text-xs font-bold ${
+                      isAuthenticated ? 'text-[#b30000]' : 'text-gray-700 bg-gray-100'
+                    }`}
+                    title={isAuthenticated ? 'Edit Skills Matrix' : '🔒 Requires Admin Login - Click to log on as rafi'}
                   >
-                    ✏️ Edit Skills
+                    {isAuthenticated ? '✏️ Edit Skills' : '🔒 Edit Skills'}
                   </button>
                 </div>
 
@@ -935,25 +995,23 @@ export default function App() {
 
                     <button
                       onClick={() => {
-                        playRetroClick(soundEnabled);
-                        setIsWizardOpen(true);
                         setStartMenuOpen(false);
+                        handleRequireAuth(() => setIsWizardOpen(true), 'Log on as rafi to run the CV Import Wizard.');
                       }}
                       className="w-full text-left px-3 py-1.5 hover:bg-[#000080] hover:text-white flex items-center gap-2 font-bold text-[#b30000]"
                     >
-                      <span>🧙‍♂️</span>
+                      <span>{isAuthenticated ? '🧙‍♂️' : '🔒'}</span>
                       <span>CV Import Wizard (Paste CV)</span>
                     </button>
 
                     <button
                       onClick={() => {
-                        playRetroClick(soundEnabled);
-                        setIsEditorOpen(true);
                         setStartMenuOpen(false);
+                        handleRequireAuth(() => setIsEditorOpen(true), 'Log on as rafi to customize and edit your CV.');
                       }}
                       className="w-full text-left px-3 py-1.5 hover:bg-[#000080] hover:text-white flex items-center gap-2"
                     >
-                      <span>📝</span>
+                      <span>{isAuthenticated ? '📝' : '🔒'}</span>
                       <span>Notepad (Edit / Customize CV)</span>
                     </button>
 
@@ -970,6 +1028,30 @@ export default function App() {
                     </button>
 
                     <hr className="retro-hr my-1" />
+
+                    {isAuthenticated ? (
+                      <button
+                        onClick={() => {
+                          setStartMenuOpen(false);
+                          handleLogout();
+                        }}
+                        className="w-full text-left px-3 py-1.5 hover:bg-[#000080] hover:text-white flex items-center gap-2 text-[#b30000] font-bold"
+                      >
+                        <span>🔒</span>
+                        <span>Log Off rafi...</span>
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          setStartMenuOpen(false);
+                          handleRequireAuth(() => {}, 'Log on with username "rafi" and password to unlock editing.');
+                        }}
+                        className="w-full text-left px-3 py-1.5 hover:bg-[#000080] hover:text-white flex items-center gap-2 text-[#000080] font-bold"
+                      >
+                        <span>🔑</span>
+                        <span>Log On as Rafi (Admin)...</span>
+                      </button>
+                    )}
 
                     <button
                       onClick={() => {
@@ -995,8 +1077,21 @@ export default function App() {
           </div>
         </div>
 
-        {/* System Tray (Clock, Speaker, Modem) */}
+        {/* System Tray (Clock, Speaker, Modem, Admin Lock) */}
         <div className="flex items-center gap-2 px-2 py-0.5 bevel-inset bg-[#dfdfdf] text-[11px] font-mono h-full">
+          <button
+            onClick={() => {
+              if (isAuthenticated) {
+                handleLogout();
+              } else {
+                handleRequireAuth(() => {});
+              }
+            }}
+            className="hover:scale-110 transition-transform cursor-pointer"
+            title={isAuthenticated ? 'Logged on as rafi (Admin unlocked - Click to log off)' : 'Edit mode locked (Click to log on as rafi)'}
+          >
+            {isAuthenticated ? '🔓' : '🔒'}
+          </button>
           <button
             onClick={() => setSoundEnabled(!soundEnabled)}
             className="hover:opacity-80"
@@ -1032,6 +1127,18 @@ export default function App() {
         data={data}
         onSave={handleSaveData}
         soundEnabled={soundEnabled}
+      />
+
+      {/* Windows 95 Admin Login Modal */}
+      <Windows95LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => {
+          setIsLoginModalOpen(false);
+          setPendingAuthAction(null);
+        }}
+        onSuccess={handleLoginSuccess}
+        soundEnabled={soundEnabled}
+        promptReason={loginPromptReason}
       />
     </div>
   );

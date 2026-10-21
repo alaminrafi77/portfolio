@@ -15,6 +15,9 @@ interface RetroNavBarProps {
   onOpenWizard: () => void;
   onOpenGitHubModal: () => void;
   onPrintCv: () => void;
+  isAuthenticated: boolean;
+  onLoginClick: () => void;
+  onLogoutClick: () => void;
 }
 
 export const RetroNavBar: React.FC<RetroNavBarProps> = ({
@@ -30,6 +33,9 @@ export const RetroNavBar: React.FC<RetroNavBarProps> = ({
   onOpenWizard,
   onOpenGitHubModal,
   onPrintCv,
+  isAuthenticated,
+  onLoginClick,
+  onLogoutClick,
 }) => {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [isPlayingMusic, setIsPlayingMusic] = useState(false);
@@ -170,10 +176,27 @@ export const RetroNavBar: React.FC<RetroNavBarProps> = ({
               </button>
               <button
                 onClick={() => { onOpenEditor(); setActiveMenu(null); }}
-                className="w-full text-left px-3 py-1 hover:bg-[#000080] hover:text-white text-xs"
+                className="w-full text-left px-3 py-1 hover:bg-[#000080] hover:text-white text-xs flex items-center justify-between"
               >
-                Open CV Notepad...
+                <span>Open CV Notepad...</span>
+                <span>{isAuthenticated ? '🔓' : '🔒'}</span>
               </button>
+              <hr className="retro-hr my-1" />
+              {isAuthenticated ? (
+                <button
+                  onClick={() => { onLogoutClick(); setActiveMenu(null); }}
+                  className="w-full text-left px-3 py-1 hover:bg-[#000080] hover:text-white text-xs text-[#b30000] font-bold"
+                >
+                  🔒 Log Off rafi...
+                </button>
+              ) : (
+                <button
+                  onClick={() => { onLoginClick(); setActiveMenu(null); }}
+                  className="w-full text-left px-3 py-1 hover:bg-[#000080] hover:text-white text-xs text-[#000080] font-bold"
+                >
+                  🔑 Log On (Admin)...
+                </button>
+              )}
             </div>
           )}
         </div>
@@ -366,10 +389,12 @@ export const RetroNavBar: React.FC<RetroNavBarProps> = ({
 
         <button
           onClick={onOpenWizard}
-          className="flex items-center gap-1 px-2 py-1 bevel-button text-xs text-[#b30000] font-bold bg-[#ffffcc]"
-          title="Paste your CV text to auto-fill all sections"
+          className={`flex items-center gap-1 px-2 py-1 bevel-button text-xs font-bold ${
+            isAuthenticated ? 'text-[#b30000] bg-[#ffffcc]' : 'text-gray-700 bg-gray-100'
+          }`}
+          title={isAuthenticated ? 'Paste your CV text to auto-fill all sections' : '🔒 Requires Admin Login - Click to log on as rafi'}
         >
-          <span>🧙‍♂️</span>
+          <span>{isAuthenticated ? '🧙‍♂️' : '🔒'}</span>
           <span>Import CV</span>
         </button>
 
@@ -384,12 +409,37 @@ export const RetroNavBar: React.FC<RetroNavBarProps> = ({
 
         <button
           onClick={onOpenEditor}
-          className="flex items-center gap-1 px-2 py-1 bevel-button text-xs text-[#000080] font-bold"
-          title="Edit or adjust individual fields"
+          className={`flex items-center gap-1 px-2 py-1 bevel-button text-xs font-bold ${
+            isAuthenticated ? 'text-[#000080] bg-[#e6f2ff]' : 'text-gray-700 bg-gray-100'
+          }`}
+          title={isAuthenticated ? 'Edit or adjust individual fields' : '🔒 Requires Admin Login - Click to log on as rafi'}
         >
-          <span>✏️</span>
+          <span>{isAuthenticated ? '✏️' : '🔒'}</span>
           <span>Edit CV</span>
         </button>
+
+        {isAuthenticated ? (
+          <div className="flex items-center gap-1 px-2 py-0.5 bg-[#008080] text-white bevel-inset text-[11px] font-mono">
+            <span className="text-yellow-300">🔓</span>
+            <span className="font-bold">rafi</span>
+            <button
+              onClick={onLogoutClick}
+              className="ml-1 px-1.5 py-0.5 bg-[#c0c0c0] text-black bevel-button text-[10px] font-sans font-bold hover:bg-red-600 hover:text-white"
+              title="Log off admin session"
+            >
+              Log Off
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={onLoginClick}
+            className="flex items-center gap-1 px-2.5 py-1 bevel-button text-xs font-bold bg-[#ffff99] text-[#000080] border border-[#000080] hover:bg-[#ffffcc]"
+            title="Log in as rafi (Required to edit portfolio or change data)"
+          >
+            <span>🔑</span>
+            <span>Admin Login</span>
+          </button>
+        )}
 
         <button
           onClick={handleToggleMusic}
