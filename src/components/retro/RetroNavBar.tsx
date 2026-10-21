@@ -13,7 +13,6 @@ interface RetroNavBarProps {
   onToggleCrt: () => void;
   onOpenEditor: () => void;
   onOpenWizard: () => void;
-  onOpenGitHubModal: () => void;
   onPrintCv: () => void;
   isAuthenticated: boolean;
   onLoginClick: () => void;
@@ -31,7 +30,6 @@ export const RetroNavBar: React.FC<RetroNavBarProps> = ({
   onToggleCrt,
   onOpenEditor,
   onOpenWizard,
-  onOpenGitHubModal,
   onPrintCv,
   isAuthenticated,
   onLoginClick,
@@ -75,7 +73,7 @@ export const RetroNavBar: React.FC<RetroNavBarProps> = ({
       <div className="flex items-center justify-between px-2 py-1 bg-gradient-to-r from-[#000080] via-[#0033aa] to-[#1084d0] text-white font-bold text-xs select-none">
         <div className="flex items-center gap-1.5 overflow-hidden text-ellipsis whitespace-nowrap">
           <span className="text-sm">🌐</span>
-          <span className="font-mono tracking-tight">Netscape Navigator 4.0 - [MD AL AMIN RAFI · Master in Applied AI (UNITAR) · B.Sc. in CSE]</span>
+          <span className="font-mono tracking-tight">MD AL AMIN RAFI - Official Portfolio · [Master in Applied AI (UNITAR) · B.Sc. in CSE]</span>
         </div>
         <div className="flex items-center gap-1 shrink-0">
           <button
@@ -95,7 +93,7 @@ export const RetroNavBar: React.FC<RetroNavBarProps> = ({
           <button
             onClick={() => {
               playWinStartupChime(soundEnabled);
-              alert("Thank you for visiting Md Al Amin Rafi's 90s Homepage! Bookmark and come back soon.");
+              alert("Thank you for visiting Md Al Amin Rafi's Homepage! Bookmark and come back soon.");
             }}
             className="w-4 h-4 bevel-button text-[10px] text-black flex items-center justify-center font-bold hover:bg-red-600 hover:text-white"
             title="Close"
@@ -116,12 +114,6 @@ export const RetroNavBar: React.FC<RetroNavBarProps> = ({
           </button>
           {activeMenu === 'file' && (
             <div className="absolute left-0 top-full mt-0.5 w-56 bg-[#c0c0c0] bevel-outset py-1 z-50 shadow-md text-black">
-              <button
-                onClick={() => { onOpenGitHubModal(); setActiveMenu(null); }}
-                className="w-full text-left px-3 py-1 hover:bg-[#000080] hover:text-white text-xs font-bold text-[#000080]"
-              >
-                🐙 Host on GitHub Pages...
-              </button>
               <button
                 onClick={() => { onOpenWizard(); setActiveMenu(null); }}
                 className="w-full text-left px-3 py-1 hover:bg-[#000080] hover:text-white text-xs font-bold text-[#b30000]"
@@ -396,15 +388,6 @@ export const RetroNavBar: React.FC<RetroNavBarProps> = ({
         >
           <span>{isAuthenticated ? '🧙‍♂️' : '🔒'}</span>
           <span>Import CV</span>
-        </button>
-
-        <button
-          onClick={onOpenGitHubModal}
-          className="flex items-center gap-1 px-2 py-1 bevel-button text-xs font-bold text-white bg-[#24292e] hover:bg-[#1b1f23]"
-          title="Deploy & Host this portfolio on GitHub Pages (alaminrafi77)"
-        >
-          <span>🐙</span>
-          <span>Host on GitHub</span>
         </button>
 
         <button

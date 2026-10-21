@@ -8,7 +8,6 @@ import { TerminalView } from './components/retro/TerminalView';
 import { Guestbook } from './components/retro/Guestbook';
 import { CvEditorModal } from './components/retro/CvEditorModal';
 import { CvImportWizard } from './components/retro/CvImportWizard';
-import { GitHubHostModal } from './components/retro/GitHubHostModal';
 import { CvPrintView } from './components/retro/CvPrintView';
 import { Windows95LoginModal } from './components/retro/Windows95LoginModal';
 import { playRetroClick, playWinStartupChime, playRetroBeep } from './utils/audio';
@@ -35,7 +34,6 @@ export default function App() {
   const [crtEnabled, setCrtEnabled] = useState(false);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [isWizardOpen, setIsWizardOpen] = useState(false);
-  const [isGitHubModalOpen, setIsGitHubModalOpen] = useState(false);
   const [isPrintView, setIsPrintView] = useState(false);
   const [startMenuOpen, setStartMenuOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState('');
@@ -185,7 +183,6 @@ export default function App() {
             onToggleCrt={() => setCrtEnabled(!crtEnabled)}
             onOpenEditor={() => handleRequireAuth(() => setIsEditorOpen(true), 'Log on as rafi to open CV Notepad and edit portfolio data.')}
             onOpenWizard={() => handleRequireAuth(() => setIsWizardOpen(true), 'Log on as rafi to run the CV Import Wizard.')}
-            onOpenGitHubModal={() => setIsGitHubModalOpen(true)}
             onPrintCv={() => setIsPrintView(true)}
             isAuthenticated={isAuthenticated}
             onLoginClick={() => handleRequireAuth(() => {}, 'Please enter credentials to unlock editing privileges.')}
@@ -374,17 +371,6 @@ export default function App() {
                         <button
                           onClick={() => {
                             playRetroClick(soundEnabled);
-                            setIsGitHubModalOpen(true);
-                          }}
-                          className="px-3 py-1.5 bevel-button font-bold text-xs bg-[#24292e] text-white flex items-center gap-1.5"
-                          title="Deploy & host this portfolio on GitHub Pages (alaminrafi77)"
-                        >
-                          <span>🐙</span>
-                          <span>Host on GitHub Pages</span>
-                        </button>
-                        <button
-                          onClick={() => {
-                            playRetroClick(soundEnabled);
                             setIsPrintView(true);
                           }}
                           className="px-3 py-1.5 bevel-button font-bold text-xs text-black"
@@ -509,7 +495,7 @@ export default function App() {
                     <div className="mt-3 text-center text-[10px] text-gray-600 font-mono">
                       <p>Web Server: Apache/1.3.12 (Unix)</p>
                       <p>Verified: UNITAR Malaysia & City University</p>
-                      <p className="text-[#008000] font-bold mt-1">✓ Tested with Netscape 4.0</p>
+                      <p className="text-[#008000] font-bold mt-1">✓ SSL Protected & Live on arafi.tech</p>
                     </div>
                   </div>
                 </div>
@@ -983,18 +969,6 @@ export default function App() {
 
                     <button
                       onClick={() => {
-                        playRetroClick(soundEnabled);
-                        setIsGitHubModalOpen(true);
-                        setStartMenuOpen(false);
-                      }}
-                      className="w-full text-left px-3 py-1.5 hover:bg-[#000080] hover:text-white flex items-center gap-2 font-bold text-[#000080]"
-                    >
-                      <span>🐙</span>
-                      <span>Host on GitHub Pages...</span>
-                    </button>
-
-                    <button
-                      onClick={() => {
                         setStartMenuOpen(false);
                         handleRequireAuth(() => setIsWizardOpen(true), 'Log on as rafi to run the CV Import Wizard.');
                       }}
@@ -1103,13 +1077,6 @@ export default function App() {
           <span className="font-bold text-gray-800">{currentTime || '12:00 PM'}</span>
         </div>
       </footer>
-
-      {/* GitHub Pages Host Wizard Modal */}
-      <GitHubHostModal
-        isOpen={isGitHubModalOpen}
-        onClose={() => setIsGitHubModalOpen(false)}
-        soundEnabled={soundEnabled}
-      />
 
       {/* CV Import Wizard Modal */}
       <CvImportWizard
