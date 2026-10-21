@@ -1,0 +1,134 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --win95-bg: #008080;
+    --win95-gray: #c0c0c0;
+    --win95-dark: #000080;
+    --win95-light: #ffffff;
+    --win95-shadow: #808080;
+    --win95-black: #000000;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "MS Sans Serif", "Courier Prime", monospace, sans-serif;
+    background-color: var(--win95-bg);
+    color: #000000;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+}
+
+/* 90s Authentic Bevels */
+.bevel-outset {
+  box-shadow: inset 1px 1px 0px #ffffff,
+              inset -1px -1px 0px #000000,
+              inset 2px 2px 0px #dfdfdf,
+              inset -2px -2px 0px #808080;
+}
+
+.bevel-inset {
+  box-shadow: inset 1px 1px 0px #808080,
+              inset -1px -1px 0px #ffffff,
+              inset 2px 2px 0px #000000,
+              inset -2px -2px 0px #dfdfdf;
+}
+
+.bevel-thin-inset {
+  border-top: 1px solid #7b7b7b;
+  border-left: 1px solid #7b7b7b;
+  border-bottom: 1px solid #ffffff;
+  border-right: 1px solid #ffffff;
+}
+
+.bevel-thin-outset {
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-bottom: 1px solid #7b7b7b;
+  border-right: 1px solid #7b7b7b;
+}
+
+.bevel-button {
+  background-color: #c0c0c0;
+  box-shadow: inset 1px 1px 0px #ffffff,
+              inset -1px -1px 0px #000000,
+              inset 2px 2px 0px #dfdfdf,
+              inset -2px -2px 0px #808080;
+  cursor: pointer;
+  user-select: none;
+}
+
+.bevel-button:active {
+  box-shadow: inset 1px 1px 0px #000000,
+              inset -1px -1px 0px #ffffff,
+              inset 2px 2px 0px #808080,
+              inset -2px -2px 0px #dfdfdf;
+  transform: translate(1px, 1px);
+}
+
+.bevel-field {
+  background-color: #ffffff;
+  box-shadow: inset 1px 1px 0px #808080,
+              inset -1px -1px 0px #ffffff,
+              inset 2px 2px 0px #000000,
+              inset -2px -2px 0px #dfdfdf;
+}
+
+/* Authentic CRT scanline overlay */
+.crt-overlay::before {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+  z-index: 9999;
+  background-size: 100% 3px, 6px 100%;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+/* 90s Retro Marquee animation */
+@keyframes marquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-marquee {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee 25s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* 90s Horizontal Rule Groove */
+.retro-hr {
+  border: 0;
+  height: 2px;
+  border-top: 1px solid #808080;
+  border-bottom: 1px solid #ffffff;
+  margin: 12px 0;
+}
+
+/* Custom 90s Scrollbars */
+::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+  background: #dfdfdf;
+}
+
+::-webkit-scrollbar-track {
+  background: #c0c0c0;
+  border: 1px solid #808080;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  box-shadow: inset 1px 1px 0px #ffffff,
+              inset -1px -1px 0px #000000,
+              inset 2px 2px 0px #dfdfdf,
+              inset -2px -2px 0px #808080;
+}
