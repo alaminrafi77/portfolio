@@ -248,6 +248,22 @@ export const CvEditorModal: React.FC<CvEditorModalProps> = ({
                   />
                 </div>
               </div>
+
+              <div>
+                <label className="block font-bold mb-1">Profile Photo URL (JPG / PNG):</label>
+                <input
+                  type="text"
+                  value={formData.personalInfo.photoUrl || ''}
+                  placeholder="./md_al_amin_rafi.jpg"
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      personalInfo: { ...formData.personalInfo, photoUrl: e.target.value },
+                    })
+                  }
+                  className="w-full bevel-field px-2 py-1 font-mono text-xs text-black"
+                />
+              </div>
             </div>
           )}
 

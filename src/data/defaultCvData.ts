@@ -13,6 +13,7 @@ export const initialPortfolioData: PortfolioData = {
     github: 'https://github.com/alaminrafi77',
     linkedin: 'https://linkedin.com/in/alaminrafi',
     portfolioUrl: 'https://github.com/alaminrafi77',
+    photoUrl: './md_al_amin_rafi.jpg',
     availableForHire: true,
     yearsOfExperience: 3,
   },

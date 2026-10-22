@@ -11,17 +11,19 @@ import { CvImportWizard } from './components/retro/CvImportWizard';
 import { CvPrintView } from './components/retro/CvPrintView';
 import { Windows95LoginModal } from './components/retro/Windows95LoginModal';
 import { playRetroClick, playWinStartupChime, playRetroBeep } from './utils/audio';
+import profilePhoto from './assets/md_al_amin_rafi.jpg';
 
 export default function App() {
   const [data, setData] = useState<PortfolioData>(() => {
     try {
-      const saved = localStorage.getItem('alamin_cv_data_v4');
+      const saved = localStorage.getItem('alamin_cv_data_v5');
       if (saved) return JSON.parse(saved);
 
       // Auto-clear older versions to ensure exact match with alaminrafi77
       localStorage.removeItem('alamin_cv_data');
       localStorage.removeItem('alamin_cv_data_v2');
       localStorage.removeItem('alamin_cv_data_v3');
+      localStorage.removeItem('alamin_cv_data_v4');
     } catch {
       // fallback
     }
@@ -35,6 +37,7 @@ export default function App() {
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [isWizardOpen, setIsWizardOpen] = useState(false);
   const [isPrintView, setIsPrintView] = useState(false);
+  const [isPhotoViewerOpen, setIsPhotoViewerOpen] = useState(false);
   const [startMenuOpen, setStartMenuOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState('');
   const [copiedEmail, setCopiedEmail] = useState(false);
@@ -223,59 +226,39 @@ export default function App() {
                 {/* 90s Hero Header with Pixel Art Avatar & Bio */}
                 <div className="border-2 border-dashed border-[#808080] p-4 bg-[#f8f8f8]">
                   <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
-                    {/* Retro Developer Portrait Avatar */}
+                    {/* Authentic Developer Portrait Photo */}
                     <div className="shrink-0 flex flex-col items-center">
-                      <div className="w-36 h-36 bg-[#000080] p-1 bevel-inset border-2 border-black flex items-center justify-center relative overflow-hidden">
-                        <svg
-                          viewBox="0 0 100 100"
-                          className="w-full h-full"
-                          shapeRendering="crispEdges"
-                        >
-                          {/* Background grid */}
-                          <rect width="100" height="100" fill="#001133" />
-                          <rect x="0" y="80" width="100" height="20" fill="#002255" />
+                      <div
+                        onClick={() => {
+                          playRetroClick(soundEnabled);
+                          setIsPhotoViewerOpen(true);
+                        }}
+                        className="w-36 h-44 sm:w-44 sm:h-52 bg-[#c0c0c0] p-1.5 bevel-inset border-2 border-black flex items-center justify-center relative overflow-hidden shadow-md cursor-pointer group hover:border-[#000080]"
+                        title="Click to view photograph in full size"
+                      >
+                        <img
+                          src={data.personalInfo.photoUrl || profilePhoto}
+                          alt={`${data.personalInfo.name} - AI Engineer & Researcher`}
+                          className="w-full h-full object-cover object-[center_30%] transition-transform duration-300 group-hover:scale-105"
+                          loading="eager"
+                        />
+                        {/* 90s subtle scanline overlay */}
+                        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-black/[0.03] to-transparent opacity-30" />
 
-                          {/* CRT Screen glow line */}
-                          <line x1="0" y1="20" x2="100" y2="20" stroke="#003377" strokeWidth="1" />
-                          <line x1="0" y1="40" x2="100" y2="40" stroke="#003377" strokeWidth="1" />
-                          <line x1="0" y1="60" x2="100" y2="60" stroke="#003377" strokeWidth="1" />
-
-                          {/* Body / Shoulders */}
-                          <rect x="25" y="70" width="50" height="30" fill="#1b4965" />
-                          <rect x="35" y="70" width="30" height="15" fill="#62b6cb" />
-
-                          {/* Neck */}
-                          <rect x="42" y="60" width="16" height="12" fill="#e0a96d" />
-
-                          {/* Head / Face */}
-                          <rect x="32" y="28" width="36" height="34" fill="#f0be86" />
-
-                          {/* Hair (Black 90s style) */}
-                          <rect x="30" y="20" width="40" height="12" fill="#111111" />
-                          <rect x="28" y="24" width="8" height="14" fill="#111111" />
-                          <rect x="64" y="24" width="8" height="14" fill="#111111" />
-
-                          {/* Glasses */}
-                          <rect x="34" y="38" width="13" height="8" fill="#ffffff" stroke="#222" strokeWidth="2" />
-                          <rect x="53" y="38" width="13" height="8" fill="#ffffff" stroke="#222" strokeWidth="2" />
-                          <line x1="47" y1="42" x2="53" y2="42" stroke="#222" strokeWidth="2" />
-                          <rect x="39" y="41" width="3" height="3" fill="#000000" />
-                          <rect x="58" y="41" width="3" height="3" fill="#000000" />
-
-                          {/* Nose & Friendly Smile */}
-                          <rect x="48" y="48" width="4" height="4" fill="#d49a5b" />
-                          <path d="M44 55 Q50 59 56 55" stroke="#993300" strokeWidth="2" fill="none" />
-
-                          {/* Vintage Headphones */}
-                          <rect x="24" y="34" width="6" height="16" fill="#ffaa00" />
-                          <rect x="70" y="34" width="6" height="16" fill="#ffaa00" />
-                          <path d="M27 34 Q50 14 73 34" stroke="#888888" strokeWidth="3" fill="none" />
-                        </svg>
+                        {/* Hover Zoom badge */}
+                        <div className="absolute bottom-1 right-1 bg-black/80 text-white text-[9px] font-mono px-1 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                          🔍 Click to View
+                        </div>
                       </div>
-                      <span className="mt-1 font-mono text-[10px] text-gray-600 font-bold">
-                        [MD_AL_AMIN_RAFI.GIF]
+                      <span className="mt-1.5 font-mono text-[10px] text-gray-700 font-bold tracking-tight">
+                        [MD_AL_AMIN_RAFI.JPG]
                       </span>
-                      <span className="text-[9px] text-[#008000] font-bold">● MASTER IN APPLIED AI</span>
+                      <span className="text-[9px] text-[#008000] font-bold font-mono">
+                        ● MASTER IN APPLIED AI
+                      </span>
+                      <span className="text-[9px] text-gray-500 font-mono">
+                        UNITAR INTERNATIONAL UNIV
+                      </span>
                     </div>
 
                     {/* Intro Details */}
@@ -1107,6 +1090,70 @@ export default function App() {
         soundEnabled={soundEnabled}
         promptReason={loginPromptReason}
       />
+
+      {/* Windows 95 Picture Viewer Modal */}
+      {isPhotoViewerOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 p-2 sm:p-4 backdrop-blur-[1px]">
+          <div className="bg-[#c0c0c0] bevel-outset border-2 border-[#ffffff] shadow-2xl max-w-3xl w-full text-black flex flex-col max-h-[92vh] animate-in fade-in zoom-in-95 duration-150">
+            {/* Title Bar */}
+            <div className="flex items-center justify-between px-2 py-1 bg-gradient-to-r from-[#000080] via-[#0033aa] to-[#1084d0] text-white font-bold text-xs select-none">
+              <div className="flex items-center gap-1.5 truncate">
+                <span>🖼️</span>
+                <span className="font-mono">Windows 95 Picture Viewer - [C:\PORTFOLIO\MD_AL_AMIN_RAFI.JPG]</span>
+              </div>
+              <button
+                onClick={() => {
+                  playRetroClick(soundEnabled);
+                  setIsPhotoViewerOpen(false);
+                }}
+                className="w-4 h-4 bevel-button text-black text-[10px] flex items-center justify-center font-bold hover:bg-red-600 hover:text-white"
+                title="Close"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Classic Menu Bar */}
+            <div className="flex items-center gap-4 px-2 py-1 bg-[#c0c0c0] border-b border-[#808080] text-xs font-sans select-none text-gray-800">
+              <span className="hover:underline cursor-pointer"><span className="underline">F</span>ile</span>
+              <span className="hover:underline cursor-pointer"><span className="underline">E</span>dit</span>
+              <span className="hover:underline cursor-pointer"><span className="underline">V</span>iew</span>
+              <span className="hover:underline cursor-pointer"><span className="underline">H</span>elp</span>
+            </div>
+
+            {/* Photo Container */}
+            <div className="p-3 bg-[#404040] overflow-auto flex items-center justify-center min-h-[320px] max-h-[68vh]">
+              <div className="bevel-inset border-2 border-black bg-black p-1 shadow-2xl max-w-full">
+                <img
+                  src={data.personalInfo.photoUrl || profilePhoto}
+                  alt={data.personalInfo.name}
+                  className="max-h-[62vh] max-w-full object-contain mx-auto"
+                />
+              </div>
+            </div>
+
+            {/* Status Bar */}
+            <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-1.5 bg-[#c0c0c0] border-t border-[#ffffff] text-[11px] font-mono text-gray-700">
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-[#000080]">MD AL AMIN RAFI</span>
+                <span>·</span>
+                <span>UNITAR International University</span>
+                <span>·</span>
+                <span>1448 × 1086 RGB</span>
+              </div>
+              <button
+                onClick={() => {
+                  playRetroClick(soundEnabled);
+                  setIsPhotoViewerOpen(false);
+                }}
+                className="px-4 py-0.5 bevel-button text-xs font-bold text-black hover:bg-[#d0d0d0]"
+              >
+                Close Viewer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

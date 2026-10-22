@@ -10,6 +10,7 @@ export interface PersonalInfo {
   github: string;
   linkedin: string;
   portfolioUrl: string;
+  photoUrl?: string;
   availableForHire: boolean;
   yearsOfExperience: number;
 }
