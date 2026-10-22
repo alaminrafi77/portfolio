@@ -162,12 +162,15 @@ export default function App() {
     >
       {/* 1. Retro 90s Marquee Ticker */}
       <div className="bg-[#ffff00] text-black border-b border-black py-0.5 px-2 overflow-hidden font-mono font-bold text-[11px] shadow-sm select-none">
-        <div className="animate-marquee flex items-center gap-6">
-          <span>★★★ WELCOME TO MD AL AMIN RAFI'S OFFICIAL 1990S PORTFOLIO & CV ★★★</span>
-          <span>MASTER IN APPLIED ARTIFICIAL INTELLIGENCE · UNITAR INTERNATIONAL UNIVERSITY, MALAYSIA</span>
-          <span>PHONE: {data.personalInfo.phone} · EMAIL: {data.personalInfo.email} · GITHUB: {data.personalInfo.github}</span>
-          <span>★ ARTIFICIAL INTELLIGENCE · MACHINE LEARNING · CYBERSECURITY & CTF · WEB DEV ★</span>
-          <span>LOCATION: BANDAR SUNWAY, PETALING JAYA, SELANGOR, MALAYSIA</span>
+        <div className="animate-marquee flex items-center gap-8 whitespace-nowrap">
+          <span className="text-[#000080]">&gt;&gt; console.log(&quot;✦ THANK YOU FOR VISITING MY PROFILE! ✦&quot;);</span>
+          <span className="text-[#800000]">// HTTP/2 200 OK · [visitor_connected: true] · welcome_protocol.init()</span>
+          <span className="text-[#006000]">&gt;&gt; System.out.println(&quot;✦ Thank you for visiting my profile! ✦&quot;);</span>
+          <span className="text-[#4b0082]">// def greet(visitor): return &quot;Thank you for visiting my profile!&quot;</span>
+          <span className="text-[#b22222]">&gt;&gt; echo &quot;Thank you for visiting my profile!&quot; &gt;&gt; /dev/welcome_log</span>
+          <span className="text-[#000080]">// return &#123; status: 200, msg: &quot;Thank you for visiting my profile!&quot;, dev: &quot;Al-Amin Rafi&quot; &#125;;</span>
+          <span className="text-[#800000]">&gt;&gt; await visitor.connect(() =&gt; &quot;✦ THANK YOU FOR VISITING MY PROFILE! ✦&quot;);</span>
+          <span className="text-[#006000]">// [0x200_OK] printf(&quot;Thank you for visiting my profile!\n&quot;);</span>
         </div>
       </div>
 
