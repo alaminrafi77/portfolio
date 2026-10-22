@@ -16,14 +16,15 @@ import profilePhoto from './assets/md_al_amin_rafi.jpg';
 export default function App() {
   const [data, setData] = useState<PortfolioData>(() => {
     try {
-      const saved = localStorage.getItem('alamin_cv_data_v5');
+      const saved = localStorage.getItem('alamin_cv_data_v6');
       if (saved) return JSON.parse(saved);
 
-      // Auto-clear older versions to ensure exact match with alaminrafi77
+      // Auto-clear older versions to ensure exact match with justinrafi007
       localStorage.removeItem('alamin_cv_data');
       localStorage.removeItem('alamin_cv_data_v2');
       localStorage.removeItem('alamin_cv_data_v3');
       localStorage.removeItem('alamin_cv_data_v4');
+      localStorage.removeItem('alamin_cv_data_v5');
     } catch {
       // fallback
     }
@@ -629,7 +630,7 @@ export default function App() {
                           rel="noreferrer"
                           className="px-2.5 py-1 bevel-button font-bold text-xs text-[#000080]"
                         >
-                          🔗 View on GitHub (alaminrafi77)
+                          🔗 View on GitHub ({data.personalInfo.github.replace('https://github.com/', '').replace(/\/$/, '')})
                         </a>
                       </div>
                     </div>
